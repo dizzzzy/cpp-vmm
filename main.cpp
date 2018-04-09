@@ -16,6 +16,8 @@ const int TLB_SIZE = 16;
 int main() { 
     string line;
     ifstream myfile ("addresses.txt");
+    ofstream outputFile;
+    outputFile.open("output.txt");
     FILE * pFile;
     pFile = fopen ( "BACKING_STORE.bin" , "r" );
     ifstream backingStoreBin("BACKING_STORE.bin", std::ios::binary);
@@ -65,7 +67,10 @@ int main() {
         if(corFrame == -1){ //means that it was not found in the TLB, check Page Table now
             if(pageTable.frameNumber[pageNum] != -1){
                 corFrame = pageTable.frameNumber[pageNum];
+                cout<< "Found frame number in Page Table."<< endl;
             }
+        }else{
+            cout<< "Found frame number in TLB." << endl;
         }
         if(corFrame == -1){ //means that the frame number was not found in TLB and Page Table
             // go to bin and load the frame into physical mem and update TLB and Page Table
@@ -75,8 +80,9 @@ int main() {
                 fread(str, sizeof(char), FRAME_SIZE, pFile);
                 // const char temp[FRAME_SIZE] = str;
                 if(physicalMem.size() != PHYSICAL_MEM_SIZE){
-                    cout<< int(str[offset]) << endl; //testing if the numbers are working properly
-                    cout<< int(backingStore[FRAME_SIZE* pageNum+offset])<< endl;
+                    // cout<< int(str[offset]) << endl; //testing if the numbers are working properly
+                    // cout<< int(backingStore[FRAME_SIZE* pageNum+offset])<< endl;
+                    cout<< "Found frame number in Hard Drive." <<endl;
                     //push into physical mem
                     physicalMem.push_back(str);
                     corFrame = int(physicalMem.size()-1);
@@ -97,13 +103,19 @@ int main() {
         //read physical mem
         int memOutput = int(physicalMem.at(corFrame)[offset]);
         
-        cout<< "Original number: " << inputTable.at(i) << endl;
-        cout<< "Page number: " << pageNum <<endl;
+        cout<< "Virtual Address: " << inputTable.at(i) << endl;
+        cout<< "Page Number: " << pageNum <<endl;
         cout<< "Offset: "<< offset <<endl;
-        cout<< "Physical memory output: " << memOutput<< endl;
+        cout<< "Physical Memory Address: " << FRAME_SIZE* corFrame + offset << endl;
+        cout<< "Physical Memory Output: " << memOutput<< endl <<endl;
 
+        outputFile << "Virtual Address: " << inputTable.at(i) << "\t";
+        outputFile<< "Physical Memory Address: " << FRAME_SIZE* corFrame + offset << "\t";
+        outputFile<< "Physical Memory Output: " << memOutput<< endl;
     }
     
+    pclose(pFile);
+    outputFile.close();
     getchar();
     return 0;
 }
