@@ -1,5 +1,4 @@
 Virtual Address: 16916	Physical Memory Address: 20	Physical Memory Output: 0
-Virtual Address: 16916	Physical Memory Address: 20	Physical Memory Output: 0
 Virtual Address: 62493	Physical Memory Address: 285	Physical Memory Output: 0
 Virtual Address: 30198	Physical Memory Address: 758	Physical Memory Output: 29
 Virtual Address: 53683	Physical Memory Address: 947	Physical Memory Output: 108

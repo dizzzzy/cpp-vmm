@@ -27,6 +27,7 @@ int main() {
     vector<char> backingStore((std::istreambuf_iterator<char>(backingStoreBin)), //same as fread fscan combo (for testing)
          (std::istreambuf_iterator<char>()));
     vector<int> inputTable;
+    int firstUsedIndex= 0;
 
     if (myfile.is_open())
     {
@@ -86,6 +87,20 @@ int main() {
                     //push into physical mem
                     physicalMem.push_back(str);
                     corFrame = int(physicalMem.size()-1);
+                    //update page table
+                    pageTable.frameNumber[pageNum] = corFrame;
+                    //update TLB
+                    tlbTableRow* row = new tlbTableRow;
+                    row->pageNumber = pageNum;
+                    row->frameNubmer = corFrame;
+                    tlb.add(row);
+                }else{
+                    //if physical mem is full
+                    cout<< "Found frame number in Hard Drive." <<endl;
+                    //push into physical mem
+                    physicalMem.at(firstUsedIndex) = str;
+                    corFrame = firstUsedIndex;
+                    firstUsedIndex++;
                     //update page table
                     pageTable.frameNumber[pageNum] = corFrame;
                     //update TLB
