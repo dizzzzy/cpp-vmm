@@ -149,6 +149,10 @@ int main() {
     cout<< "TLB rate: " << tlbRate <<endl;
     cout<< "Page fault: " << pageFaults <<endl;
     cout<< "Page fault rate: " << pageFaultRate <<endl;
+    outputFile<< "TLB hit: " << tlbHit <<endl;
+    outputFile<< "TLB rate: " << tlbRate <<endl;
+    outputFile<< "Page fault: " << pageFaults <<endl;
+    outputFile<< "Page fault rate: " << pageFaultRate <<endl;
     pclose(pFile);
     outputFile.close();
     getchar();
